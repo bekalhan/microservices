@@ -1,0 +1,36 @@
+spring:
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    cache: false
+  application:
+    name: "email-service"
+  mail:
+    host: localhost
+    port: 1025
+    username: kalhan
+    password: kalhan
+    properties:
+      mail:
+        smtp:
+          trust: "*"
+        auth: true
+        starttls:
+          enabled: true
+        connectiontimeout: 5000
+        timeout: 3000
+        writetimeout: 5000
+application:
+  mailing:
+    frontend:
+      activation-url: http://localhost:4200/activate-account
+server:
+  port: 8083
+kafka:
+  host: localhost:9092
+  topics:
+    user-registered:
+      topic: auth_service.user_registered.0
+      consumerGroup: ${spring.application.name}-user-registered-consumer
+      replicationFactor: 1
+      retentionInMs: 604800000

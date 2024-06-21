@@ -39,3 +39,12 @@ application:
       photos-output-path: ./uploads
 server:
   port: 8081
+
+kafka:
+  host: localhost:9092
+  topics:
+    user-registered:
+      topicName: auth_service.user_registered.0
+      partitionCount: 1
+      replicationFactor: 1
+      retentionInMs: 604800000

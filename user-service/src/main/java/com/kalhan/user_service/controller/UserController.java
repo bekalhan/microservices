@@ -24,8 +24,13 @@ public class UserController {
 
     @GetMapping("/find-user")
     public ResponseEntity<User> findUserByEmail(@RequestParam String email){
-        System.out.println("email: " + email);
         User user = userService.findUserByEmail(email);
         return ResponseEntity.status(HttpStatus.OK).body(user);
+    }
+
+    @GetMapping("/activate-account/{id}")
+    public ResponseEntity<?> activateUserAccount(@PathVariable(value = "id") String id){
+        userService.activateAccount(id);
+        return ResponseEntity.status(HttpStatus.OK).body("User account has been activated");
     }
 }

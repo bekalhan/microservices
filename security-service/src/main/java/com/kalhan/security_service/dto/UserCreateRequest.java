@@ -18,4 +18,5 @@ public class UserCreateRequest {
     private boolean isAccountLocked;
     private boolean enabled;
     private List<String> roles;
+    private String token;
 }

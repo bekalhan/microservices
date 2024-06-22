@@ -1,5 +1,6 @@
 package com.kalhan.user_service.controller;
 
+import com.kalhan.user_service.dto.ChangePasswordRequest;
 import com.kalhan.user_service.dto.FindUserRequest;
 import com.kalhan.user_service.dto.UserDto;
 import com.kalhan.user_service.entity.User;
@@ -28,9 +29,16 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(user);
     }
 
-    @GetMapping("/activate-account/{id}")
+    @PatchMapping("/activate-account/{id}")
     public ResponseEntity<?> activateUserAccount(@PathVariable(value = "id") String id){
         userService.activateAccount(id);
         return ResponseEntity.status(HttpStatus.OK).body("User account has been activated");
+    }
+
+    @PatchMapping("/change-password")
+    public ResponseEntity<?> changePassword(@RequestBody ChangePasswordRequest changePasswordRequest){
+        userService.changePassword(changePasswordRequest);
+        return ResponseEntity.status(HttpStatus.OK).body("Password has been changed successfully");
+
     }
 }

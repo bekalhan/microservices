@@ -2,17 +2,11 @@ package com.kalhan.security_service.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.net.HttpHeaders;
-import com.kalhan.security_service.dto.AuthenticationRequest;
-import com.kalhan.security_service.dto.AuthenticationResponse;
-import com.kalhan.security_service.dto.RegistrationRequest;
-import com.kalhan.security_service.dto.UserCreateRequest;
+import com.kalhan.security_service.dto.*;
 import com.kalhan.security_service.entity.ActivationToken;
 import com.kalhan.security_service.entity.Token;
 import com.kalhan.security_service.entity.User;
-import com.kalhan.security_service.handler.exception.InactiveAccountException;
-import com.kalhan.security_service.handler.exception.InvalidTokenException;
-import com.kalhan.security_service.handler.exception.TokenExpiredException;
-import com.kalhan.security_service.handler.exception.UserAlreadyExistException;
+import com.kalhan.security_service.handler.exception.*;
 import com.kalhan.security_service.jwt.JwtService;
 import com.kalhan.security_service.kafka.producer.KafkaProducer;
 import com.kalhan.security_service.kafka.properties.UserRegisterTopicProperties;
@@ -33,6 +27,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.security.Principal;
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -98,11 +93,6 @@ public class AuthenticationService {
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
 
-        User apiUser = userApiClient.findUserByEmail(request.getEmail());
-
-        if(!apiUser.isEnabled()){
-            throw new InactiveAccountException("Account is not active please check your email and active your account");
-        }
 
         var auth = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -110,6 +100,13 @@ public class AuthenticationService {
                         request.getPassword()
                 )
         );
+
+        User apiUser = userApiClient.findUserByEmail(request.getEmail());
+
+        if(!apiUser.isEnabled()){
+            throw new InactiveAccountException("Account is not active please check your email and active your account");
+        }
+
         var claims = new HashMap<String, Object>();
         var user = ((User) auth.getPrincipal());
         claims.put("fullName", user.getFullName());
@@ -135,8 +132,10 @@ public class AuthenticationService {
         refreshToken = authHeader.substring(7);
         userEmail = jwtService.extractUsername(refreshToken);
         if (userEmail != null) {
-            var user = this.userRepository.findByEmail(userEmail)
-                    .orElseThrow();
+            var user = userApiClient.findUserByEmail(userEmail);
+            if(user == null){
+                throw new UsernameNotFoundException("User not found");
+            }
             if (jwtService.isTokenValid(refreshToken, user)) {
                 var accessToken = jwtService.generateToken(user);
                 revokeAllUserTokens(user);
@@ -177,6 +176,29 @@ public class AuthenticationService {
         userApiClient.activateUserAccount(apiUser.getId());
         savedToken.setValidatedAt(LocalDateTime.now());
         activationTokenRepository.save(savedToken);
+    }
+
+    public void changePassword(ChangePasswordRequest request, Principal connectedUser) {
+
+        var user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
+
+        // check if the current password is correct
+        if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
+            throw new IncorrectCredentialsException("Wrong password");
+        }
+        // check if the two new passwords are the same
+        if (!request.getNewPassword().equals(request.getConfirmationPassword())) {
+            throw new IncorrectCredentialsException("Passwords does not match");
+        }
+
+        // save the new password
+        userApiClient.changeUserPassword(
+                UserChangePasswordRequest.builder()
+                        .id(user.getId())
+                        .newPassword(passwordEncoder.encode(request.getNewPassword()))
+                        .build()
+        );
+
     }
 
     private void revokeAllUserTokens(User user) {

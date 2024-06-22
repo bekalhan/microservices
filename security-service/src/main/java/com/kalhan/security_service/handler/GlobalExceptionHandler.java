@@ -1,9 +1,6 @@
 package com.kalhan.security_service.handler;
 
-import com.kalhan.security_service.handler.exception.InactiveAccountException;
-import com.kalhan.security_service.handler.exception.InvalidTokenException;
-import com.kalhan.security_service.handler.exception.TokenExpiredException;
-import com.kalhan.security_service.handler.exception.UserAlreadyExistException;
+import com.kalhan.security_service.handler.exception.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -127,6 +124,19 @@ public class GlobalExceptionHandler {
                         ExceptionResponse.builder()
                                 .businessErrorCode(INACTIVE_ACCOUNT.getCode())
                                 .businessErrorDescription(INACTIVE_ACCOUNT.getDescription())
+                                .error(exp.getMessage())
+                                .build()
+                );
+    }
+
+    @ExceptionHandler(IncorrectCredentialsException.class)
+    public ResponseEntity<ExceptionResponse> handleTokenExpiredException(IncorrectCredentialsException exp) {
+        return ResponseEntity
+                .status(INCORRECT_CREDENTIALS.getHttpStatus())
+                .body(
+                        ExceptionResponse.builder()
+                                .businessErrorCode(INCORRECT_CREDENTIALS.getCode())
+                                .businessErrorDescription(INCORRECT_CREDENTIALS.getDescription())
                                 .error(exp.getMessage())
                                 .build()
                 );

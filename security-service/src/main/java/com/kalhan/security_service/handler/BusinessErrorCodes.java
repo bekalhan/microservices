@@ -7,6 +7,7 @@ public enum BusinessErrorCodes {
     //NO_CODE(0,HttpStatus.NOT_IMPLEMENTED,"No code"),
     //INCORRECT_CURRENT_PASSWORD(300,HttpStatus.BAD_REQUEST,"Current password is incorrect"),
     //NEW_PASSWORD_DOES_NOT_MATCH(301,HttpStatus.BAD_REQUEST,"The new password does not match"),
+    INCORRECT_CREDENTIALS(309,HttpStatus.BAD_REQUEST,"Incorrect credentials"),
     INACTIVE_ACCOUNT(308,HttpStatus.BAD_REQUEST,"User account inactive"),
     USER_ALREADY_EXIST(307,HttpStatus.BAD_REQUEST,"User already exist"),
     TOKEN_EXPIRED(306, HttpStatus.BAD_REQUEST, "The token has expired"),

@@ -47,7 +47,6 @@ public class AuthenticationService {
     private final TokenRepository tokenRepository;
     private final ActivationTokenRepository activationTokenRepository;
     private final AuthenticationManager authenticationManager;
-    private final UserRepository userRepository;
     private final KafkaProducer kafkaProducer;
     private final UserRegisterTopicProperties userRegisterTopicProperties;
 
@@ -153,7 +152,7 @@ public class AuthenticationService {
         ActivationToken savedToken = activationTokenRepository.findByToken(token)
                 .orElseThrow(() -> new InvalidTokenException("Token is invalid"));
 
-        User apiUser = userApiClient.findUserByEmail(savedToken.getEmail());
+        User apiUser = userApiClient.findUserById(savedToken.getUserId());
         if (apiUser == null) {
             throw new UsernameNotFoundException("User not found");
         }
@@ -175,6 +174,7 @@ public class AuthenticationService {
         //change enable true for user from user-service
         userApiClient.activateUserAccount(apiUser.getId());
         savedToken.setValidatedAt(LocalDateTime.now());
+        savedToken.setUser(apiUser);
         activationTokenRepository.save(savedToken);
     }
 
@@ -215,6 +215,7 @@ public class AuthenticationService {
     private void saveUserToken(User user, String jwtToken) {
         var token = Token.builder()
                 .user(user)
+                .userId(user.getId())
                 .token(jwtToken)
                 .revoked(false)
                 .expired(false)
@@ -238,7 +239,8 @@ public class AuthenticationService {
                 .token(generatedToken)
                 .createdAt(LocalDateTime.now())
                 .expiresAt(LocalDateTime.now().plusMinutes(15))
-                .email(user.getEmail())
+                .user(user)
+                .userId(user.getId())
                 .build();
         activationTokenRepository.save(token);
         return generatedToken;

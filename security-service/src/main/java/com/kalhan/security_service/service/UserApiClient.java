@@ -15,6 +15,9 @@ public interface UserApiClient {
     @RequestMapping(value = "/user/find-user", method = RequestMethod.GET)
     User findUserByEmail(@RequestParam("email") String email);
 
+    @RequestMapping(value = "/user/find-user/{id}", method = RequestMethod.GET)
+    User findUserById(@PathVariable("id") String id);
+
     @RequestMapping(value = "/user/activate-account/{id}", method = RequestMethod.PATCH)
     void activateUserAccount(@PathVariable("id") String id);
 

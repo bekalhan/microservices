@@ -26,6 +26,8 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
+    public User findUserById(String id){return userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("User not found"));}
+
     public void activateAccount(String id){
         User user = userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("User not found"));
         user.setEnabled(true);

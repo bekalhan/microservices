@@ -34,3 +34,8 @@ kafka:
       consumerGroup: ${spring.application.name}-user-registered-consumer
       replicationFactor: 1
       retentionInMs: 604800000
+    user-password-reset:
+      topic: auth_service.user_password_reset.0
+      consumerGroup: ${spring.application.name}-user-password-reset-consumer
+      replicationFactor: 1
+      retentionInMs: 604800000

@@ -29,6 +29,12 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(user);
     }
 
+    @GetMapping("/find-user/{id}")
+    public ResponseEntity<User> findUserById(@PathVariable(value = "id") String id){
+        User user = userService.findUserById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(user);
+    }
+
     @PatchMapping("/activate-account/{id}")
     public ResponseEntity<?> activateUserAccount(@PathVariable(value = "id") String id){
         userService.activateAccount(id);

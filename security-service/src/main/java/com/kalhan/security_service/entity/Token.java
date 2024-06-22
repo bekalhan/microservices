@@ -32,4 +32,5 @@ public class Token {
 
     @DBRef
     private User user;
+    private String userId;
 }

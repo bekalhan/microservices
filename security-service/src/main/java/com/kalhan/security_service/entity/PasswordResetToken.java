@@ -1,5 +1,6 @@
 package com.kalhan.security_service.entity;
 
+
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -12,9 +13,8 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Document(collection = "activation_tokens")
-public class ActivationToken {
-
+@Document(collection = "password_reset_tokens")
+public class PasswordResetToken {
     @Id
     private String id;
     private String token;

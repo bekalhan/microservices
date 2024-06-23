@@ -1,8 +1,6 @@
 package com.kalhan.security_service.service;
 
-import com.kalhan.security_service.dto.UserRequest;
-import com.kalhan.security_service.dto.UserChangePasswordRequest;
-import com.kalhan.security_service.dto.UserCreateRequest;
+import com.kalhan.security_service.dto.*;
 import com.kalhan.security_service.entity.User;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +21,6 @@ public interface UserApiClient {
     void activateUserAccount(@PathVariable("id") String id);
 
     @RequestMapping(value = "/user/change-password/{id}", method = RequestMethod.PATCH)
-    void changeUserPassword(@RequestBody UserChangePasswordRequest request,@PathVariable(value = "id") String id);
+    void changeUserPassword(@RequestBody PasswordResetRequest request, @PathVariable(value = "id") String id,@RequestParam boolean isReset);
 
 }

@@ -1,14 +1,5 @@
-server:
-  port: 8082
 spring:
+  config:
+    import: optional:configserver:http://localhost:8888
   application:
-    name: "user-service"
-  data:
-    mongodb:
-      host: localhost
-      port: 27017
-      database: userdb
-      username: kalhan
-      password: kalhan
-      authentication-database: admin
-
+    name: user-service

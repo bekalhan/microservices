@@ -36,12 +36,14 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void changePassword(ChangePasswordRequest request,String id){
+    public void changePassword(ChangePasswordRequest request,String id,boolean isReset){
         User user = userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
         // check if the current password is correct
-        if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
-            throw new IncorrectCredentialsException("Wrong password");
+        if(!isReset){
+            if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword()) && !isReset) {
+                        throw new IncorrectCredentialsException("Wrong password");
+            }
         }
         // check if the two new passwords are the same
         if (!request.getNewPassword().equals(request.getConfirmationPassword())) {

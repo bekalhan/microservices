@@ -1,9 +1,6 @@
 package com.kalhan.security_service.service;
 
-import com.kalhan.security_service.dto.ChangePasswordRequest;
 import com.kalhan.security_service.dto.PasswordResetRequest;
-import com.kalhan.security_service.dto.UserChangePasswordRequest;
-import com.kalhan.security_service.dto.UserCreateRequest;
 import com.kalhan.security_service.entity.PasswordResetToken;
 import com.kalhan.security_service.entity.User;
 import com.kalhan.security_service.handler.exception.IncorrectCredentialsException;
@@ -81,18 +78,11 @@ public class PasswordResetTokenService {
 
     private void changePassword(User user,PasswordResetRequest request){
         // check if the two new passwords are the same
-        if (!request.getNewPassword().equals(request.getNewPasswordConfirmation())) {
+        if (!request.getNewPassword().equals(request.getConfirmationPassword())) {
             throw new IncorrectCredentialsException("Passwords does not match");
         }
 
-        UserChangePasswordRequest changePasswordRequest = UserChangePasswordRequest
-                .builder()
-                .id(user.getId())
-                .newPassword(request.getNewPassword())
-                .build();
-
-        changePasswordRequest.setNewPassword(request.getNewPassword());
-        userApiClient.changeUserPassword(changePasswordRequest,user.getId());
+        userApiClient.changeUserPassword(request,user.getId(),true);
     }
 
     public Boolean validatePasswordResetToken(String passwordResetToken) {

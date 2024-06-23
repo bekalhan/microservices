@@ -20,7 +20,7 @@ public class PasswordResetRequest {
     @NotEmpty(message = "Confirmation password is mandatory")
     @NotNull(message = "Confirmation password is mandatory")
     @Size(min = 8, message = "Confirmation password should be 8 characters long minimum")
-    private String newPasswordConfirmation;
+    private String confirmationPassword;
     private String email;
     private String token;
 }

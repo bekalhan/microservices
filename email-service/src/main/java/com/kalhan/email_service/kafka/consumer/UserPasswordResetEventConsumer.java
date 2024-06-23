@@ -21,7 +21,7 @@ import org.springframework.stereotype.Component;
 public class UserPasswordResetEventConsumer {
     private final EmailService emailService;
 
-    @Value("${application.mailing.frontend.activation-url}")
+    @Value("${application.mailing.frontend.password-reset-url}")
     private String activationUrl;
 
 
@@ -43,7 +43,7 @@ public class UserPasswordResetEventConsumer {
         emailService.sendEmail(
                 passwordResetEmail.getEmail(),
                 passwordResetEmail.getFullName(),
-                EmailTemplateName.ACTIVATE_ACCOUNT,
+                EmailTemplateName.PASSWORD_RESET,
                 activationUrl,
                 passwordResetEmail.getToken(),
                 "Reset password"

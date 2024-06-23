@@ -1,7 +1,7 @@
 package com.kalhan.user_service.controller;
 
+import com.kalhan.user_service.dto.UserRequest;
 import com.kalhan.user_service.dto.ChangePasswordRequest;
-import com.kalhan.user_service.dto.FindUserRequest;
 import com.kalhan.user_service.dto.UserDto;
 import com.kalhan.user_service.entity.User;
 import com.kalhan.user_service.service.UserService;
@@ -41,10 +41,18 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body("User account has been activated");
     }
 
-    @PatchMapping("/change-password")
-    public ResponseEntity<?> changePassword(@RequestBody ChangePasswordRequest changePasswordRequest){
-        userService.changePassword(changePasswordRequest);
+    @PatchMapping("/change-password/{id}")
+    public ResponseEntity<?> changePassword(
+            @RequestBody ChangePasswordRequest changePasswordRequest,
+            @PathVariable(value = "id") String id
+    ){
+        userService.changePassword(changePasswordRequest,id);
         return ResponseEntity.status(HttpStatus.OK).body("Password has been changed successfully");
+    }
 
+    @PatchMapping("/block-user")
+    public ResponseEntity<?> blockUserAccount(@RequestBody UserRequest blockUserRequest){
+        userService.blockUserAccount(blockUserRequest);
+        return ResponseEntity.status(HttpStatus.OK).body("User account has been block by admin");
     }
 }

@@ -20,6 +20,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userApiClient.findUserByEmail(username);
+        System.out.println("bak : "+user.getAuthorities());
         if (user == null) {
             throw new BadCredentialsException("email and / or Password is incorrect");
         }

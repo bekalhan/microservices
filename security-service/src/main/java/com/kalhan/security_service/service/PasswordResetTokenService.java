@@ -91,8 +91,8 @@ public class PasswordResetTokenService {
                 .newPassword(request.getNewPassword())
                 .build();
 
-        changePasswordRequest.setNewPassword(passwordEncoder.encode(request.getNewPassword()));
-        userApiClient.changeUserPassword(changePasswordRequest);
+        changePasswordRequest.setNewPassword(request.getNewPassword());
+        userApiClient.changeUserPassword(changePasswordRequest,user.getId());
     }
 
     public Boolean validatePasswordResetToken(String passwordResetToken) {

@@ -1,5 +1,6 @@
 package com.kalhan.security_service.service;
 
+import com.kalhan.security_service.dto.UserRequest;
 import com.kalhan.security_service.dto.UserChangePasswordRequest;
 import com.kalhan.security_service.dto.UserCreateRequest;
 import com.kalhan.security_service.entity.User;
@@ -21,6 +22,7 @@ public interface UserApiClient {
     @RequestMapping(value = "/user/activate-account/{id}", method = RequestMethod.PATCH)
     void activateUserAccount(@PathVariable("id") String id);
 
-    @RequestMapping(value = "/user/change-password", method = RequestMethod.PATCH)
-    void changeUserPassword(@RequestBody UserChangePasswordRequest request);
+    @RequestMapping(value = "/user/change-password/{id}", method = RequestMethod.PATCH)
+    void changeUserPassword(@RequestBody UserChangePasswordRequest request,@PathVariable(value = "id") String id);
+
 }

@@ -23,8 +23,8 @@ public class RoleConfig {
             // Ensure 'name' field is indexed uniquely
             IndexOperations indexOps = mongoTemplate.indexOps(Role.class);
 
-            addRoleIfNotExists("USER");
-            addRoleIfNotExists("ADMIN");
+            addRoleIfNotExists("ROLE_USER");
+            addRoleIfNotExists("ROLE_ADMIN");
         };
     }
 

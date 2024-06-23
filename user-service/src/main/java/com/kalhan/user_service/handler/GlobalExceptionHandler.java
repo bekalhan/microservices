@@ -1,5 +1,6 @@
 package com.kalhan.user_service.handler;
 
+import com.kalhan.user_service.handler.exception.IncorrectCredentialsException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
@@ -71,6 +72,19 @@ public class GlobalExceptionHandler {
                 .body(
                         ExceptionResponse.builder()
                                 .validationErrors(errors)
+                                .build()
+                );
+    }
+
+    @ExceptionHandler(IncorrectCredentialsException.class)
+    public ResponseEntity<ExceptionResponse> handleTokenExpiredException(IncorrectCredentialsException exp) {
+        return ResponseEntity
+                .status(INCORRECT_CREDENTIALS.getHttpStatus())
+                .body(
+                        ExceptionResponse.builder()
+                                .businessErrorCode(INCORRECT_CREDENTIALS.getCode())
+                                .businessErrorDescription(INCORRECT_CREDENTIALS.getDescription())
+                                .error(exp.getMessage())
                                 .build()
                 );
     }

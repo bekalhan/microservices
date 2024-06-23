@@ -51,7 +51,7 @@ public class AuthenticationService {
     private final UserRegisterTopicProperties userRegisterTopicProperties;
 
     public AuthenticationResponse register(RegistrationRequest request) {
-        var userRole = roleRepository.findByName("USER")
+        var userRole = roleRepository.findByName("ROLE_USER")
                 .orElseThrow(() -> new IllegalStateException("ROLE USER was not initiated"));
 
         User apiUser = userApiClient.findUserByEmail(request.getEmail());
@@ -176,29 +176,6 @@ public class AuthenticationService {
         savedToken.setValidatedAt(LocalDateTime.now());
         savedToken.setUser(apiUser);
         activationTokenRepository.save(savedToken);
-    }
-
-    public void changePassword(ChangePasswordRequest request, Principal connectedUser) {
-
-        var user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
-
-        // check if the current password is correct
-        if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
-            throw new IncorrectCredentialsException("Wrong password");
-        }
-        // check if the two new passwords are the same
-        if (!request.getNewPassword().equals(request.getConfirmationPassword())) {
-            throw new IncorrectCredentialsException("Passwords does not match");
-        }
-
-        // save the new password
-        userApiClient.changeUserPassword(
-                UserChangePasswordRequest.builder()
-                        .id(user.getId())
-                        .newPassword(passwordEncoder.encode(request.getNewPassword()))
-                        .build()
-        );
-
     }
 
     private void revokeAllUserTokens(User user) {

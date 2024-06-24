@@ -47,7 +47,6 @@ public class User implements UserDetails, Principal {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        System.out.println("entered");
         return this.roles
                 .stream()
                 .map(SimpleGrantedAuthority::new)

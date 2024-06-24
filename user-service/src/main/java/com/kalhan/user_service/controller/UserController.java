@@ -5,6 +5,7 @@ import com.kalhan.user_service.dto.ChangePasswordRequest;
 import com.kalhan.user_service.dto.UserDto;
 import com.kalhan.user_service.entity.User;
 import com.kalhan.user_service.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,7 +44,7 @@ public class UserController {
 
     @PatchMapping("/change-password/{id}")
     public ResponseEntity<?> changePassword(
-            @RequestBody ChangePasswordRequest changePasswordRequest,
+            @RequestBody @Valid ChangePasswordRequest changePasswordRequest,
             @PathVariable(value = "id") String id,
             @RequestParam Boolean isReset
     ){

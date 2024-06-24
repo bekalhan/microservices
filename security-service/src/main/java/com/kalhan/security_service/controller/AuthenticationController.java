@@ -69,4 +69,10 @@ public class AuthenticationController {
         return "Your password has been changed successfully";
     }
 
+    @GetMapping("/validateToken")
+    public ResponseEntity<ValidationResponse> validateToken(HttpServletRequest request){
+        ValidationResponse validationResponse = service.validateToken(request);
+        return ResponseEntity.status(HttpStatus.OK).body(validationResponse);
+    }
+
 }

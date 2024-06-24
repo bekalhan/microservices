@@ -14,6 +14,7 @@ import com.kalhan.security_service.repository.ActivationTokenRepository;
 import com.kalhan.security_service.repository.RoleRepository;
 import com.kalhan.security_service.repository.TokenRepository;
 import com.kalhan.security_service.repository.UserRepository;
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,8 @@ import org.springframework.messaging.support.GenericMessage;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -33,6 +36,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static org.springframework.kafka.support.KafkaHeaders.KEY;
 import static org.springframework.kafka.support.KafkaHeaders.TOPIC;
@@ -178,6 +182,23 @@ public class AuthenticationService {
         activationTokenRepository.save(savedToken);
     }
 
+    public ValidationResponse validateToken(HttpServletRequest servletRequest){
+        String token = servletRequest.getHeader("AUTHORIZATION");
+        String username = jwtService.extractUsername(token);
+        User apiUser = userApiClient.findUserByEmail(username);
+
+        List<String> authorities = apiUser.getAuthorities().stream()
+                .map(authority -> authority.getAuthority()) // Assuming getAuthority() returns a string
+                .collect(Collectors.toList());
+
+        return ValidationResponse.builder()
+                .username(username)
+                .token(token)
+                .authorities(authorities)
+                .isAuthenticated(true)
+                .build();
+    }
+
     private void revokeAllUserTokens(User user) {
         var validUserTokens = tokenRepository.findByValidTokenByUser(user.getId());
         if (validUserTokens.isEmpty()) return;
@@ -233,4 +254,5 @@ public class AuthenticationService {
         }
         return codeBuilder.toString();
     }
+
 }

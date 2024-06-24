@@ -1,0 +1,22 @@
+server:
+  port: 9191
+spring:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    gateway:
+      enabled: true
+  info:
+    env:
+      enabled: true
+
+main:
+  allow-circular-references: true

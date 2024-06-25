@@ -13,7 +13,6 @@ import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.reactive.function.client.WebClientResponseException;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
@@ -78,11 +77,11 @@ public class AuthenticationPreFilter extends AbstractGatewayFilterFactory<Abstra
                         .retrieve()
                         .bodyToMono(ValidationResponse.class)
                         .flatMap(response -> {
-                            exchange.getRequest().mutate().header("username", response.getUsername());
-
-                            String authorities = String.join(",", response.getAuthorities());
-                            exchange.getRequest().mutate().header("authorities", authorities);
-                            exchange.getRequest().mutate().header("auth-token", response.getToken());
+                            ServerHttpRequest request = exchange.getRequest().mutate()
+                                    .header("username", response.getUsername())
+                                    .header("authorities", String.join(",", response.getAuthorities()))
+                                    .header("auth-token", response.getToken())
+                                    .build();
 
                             // Check if the path requires admin role
                             if (adminListEndpoints.stream().anyMatch(exchange.getRequest().getURI().getPath()::startsWith)) {
@@ -92,7 +91,7 @@ public class AuthenticationPreFilter extends AbstractGatewayFilterFactory<Abstra
                                 }
                             }
 
-                            return chain.filter(exchange);
+                            return chain.filter(exchange.mutate().request(request).build());
                         })
                         .onErrorResume(error -> {
                             log.error("Error during authentication: {}", error.getMessage());

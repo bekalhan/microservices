@@ -34,6 +34,7 @@ public class User implements UserDetails, Principal {
     private LocalDate dateOfBirth;
     private String email;
     private String password;
+    private String profilePhoto;
     private boolean accountLocked;
     private boolean enabled;
 

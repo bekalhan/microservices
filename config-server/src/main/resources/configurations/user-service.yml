@@ -9,4 +9,8 @@ spring:
       username: kalhan
       password: kalhan
       authentication-database: admin
+application:
+  file:
+    uploads:
+      photos-output-path: ./uploads
 

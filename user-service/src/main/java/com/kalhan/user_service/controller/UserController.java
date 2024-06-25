@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/user")
@@ -57,4 +58,14 @@ public class UserController {
         userService.blockUserAccount(blockUserRequest);
         return ResponseEntity.status(HttpStatus.OK).body("User account has been block by admin");
     }
+
+    @PatchMapping(value = "/upload-photo",consumes = "multipart/form-data")
+    public ResponseEntity<?> uploadUserPhoto(
+            @RequestPart("file") MultipartFile file,
+            @RequestHeader("username") String username
+    ){
+        userService.uploadUserPhoto(file, username);
+        return ResponseEntity.ok("Photo uploaded successfully");
+    }
+
 }

@@ -14,8 +14,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Getter
@@ -38,6 +37,8 @@ public class User implements UserDetails, Principal {
     private boolean accountLocked;
     private boolean enabled;
 
+    private Set<User> followers = new HashSet<>();
+    private Set<User> following = new HashSet<>();
     private List<String> roles;
 
     @CreatedDate
@@ -95,5 +96,18 @@ public class User implements UserDetails, Principal {
 
     public String getFullName() {
         return firstname + " " + lastname;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(email, user.email);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(email);
     }
 }

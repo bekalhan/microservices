@@ -1,8 +1,6 @@
 package com.kalhan.user_service.controller;
 
-import com.kalhan.user_service.dto.UserRequest;
-import com.kalhan.user_service.dto.ChangePasswordRequest;
-import com.kalhan.user_service.dto.UserDto;
+import com.kalhan.user_service.dto.*;
 import com.kalhan.user_service.entity.User;
 import com.kalhan.user_service.service.UserService;
 import jakarta.validation.Valid;
@@ -11,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Set;
 
 @RestController
 @RequestMapping("/user")
@@ -66,6 +66,40 @@ public class UserController {
     ){
         userService.uploadUserPhoto(file, username);
         return ResponseEntity.ok("Photo uploaded successfully");
+    }
+
+    @PatchMapping("/follow-user")
+    public ResponseEntity<?> followUserAccount(
+            @RequestBody UserFollowRequest userFollowRequest,
+            @RequestHeader("username") String username
+    ){
+        userService.followUserAccount(userFollowRequest,username);
+        return ResponseEntity.status(HttpStatus.OK).body("You has been followed this user successfully");
+    }
+
+    @PatchMapping("/unfollow-user")
+    public ResponseEntity<?> unfollowUserAccount(
+            @RequestBody UserFollowRequest userFollowRequest,
+            @RequestHeader("username") String username
+    ){
+        userService.unfollowUserAccount(userFollowRequest,username);
+        return ResponseEntity.status(HttpStatus.OK).body("You has been unfollowed this user successfully");
+    }
+
+    @GetMapping("/get-followers/{id}")
+    public ResponseEntity<Set<FollowDto>> getUserFollowers(
+            @PathVariable(value = "id") String id
+    ){
+       Set<FollowDto> userDtoSet = userService.getUserFollowers(id);
+       return ResponseEntity.status(HttpStatus.OK).body(userDtoSet);
+    }
+
+    @GetMapping("/get-following/{id}")
+    public ResponseEntity<Set<FollowDto>> getUserFollowing(
+            @PathVariable(value = "id") String id
+    ){
+        Set<FollowDto> userDtoSet = userService.getUserFollowing(id);
+        return ResponseEntity.status(HttpStatus.OK).body(userDtoSet);
     }
 
 }

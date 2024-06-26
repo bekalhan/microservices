@@ -4,6 +4,8 @@ import com.kalhan.user_service.dto.UserDto;
 import com.kalhan.user_service.entity.User;
 import org.springframework.stereotype.Service;
 
+import java.util.stream.Collectors;
+
 @Service
 public class UserMapper {
 
@@ -16,6 +18,11 @@ public class UserMapper {
                 .accountLocked(userDto.isAccountLocked())
                 .enabled(userDto.isEnabled())
                 .roles(userDto.getRoles())
+                .followers(userDto.getFollowers()
+                        .stream()
+                        .map(this::toUser)
+                        .collect(Collectors.toSet()))
+
                 .build();
     }
 
@@ -27,6 +34,11 @@ public class UserMapper {
                 .password(user.getPassword())
                 .isAccountLocked(user.isAccountLocked())
                 .enabled(user.isEnabled())
-                .roles(user.getRoles()).build();
+                .roles(user.getRoles())
+                .followers(user.getFollowers()
+                        .stream()
+                        .map(this::toUserDto)
+                        .collect(Collectors.toSet()))
+                .build();
     }
 }

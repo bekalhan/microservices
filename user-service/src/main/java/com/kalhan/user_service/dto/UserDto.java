@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -17,4 +18,5 @@ public class UserDto {
     private boolean isAccountLocked;
     private boolean enabled;
     private List<String> roles;
+    private Set<UserDto> followers;
 }

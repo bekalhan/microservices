@@ -30,7 +30,9 @@ public class AuthenticationPreFilter extends AbstractGatewayFilterFactory<Abstra
             "/auth/activate-token",
             "/auth/refresh-token",
             "/auth/password-reset-request",
-            "/auth/reset-password"
+            "/auth/reset-password",
+            "/user/get-followers",
+            "/user/get-following"
     );
 
     private static final List<String> adminListEndpoints = List.of(

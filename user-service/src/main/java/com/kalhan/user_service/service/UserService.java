@@ -1,8 +1,6 @@
 package com.kalhan.user_service.service;
 
-import com.kalhan.user_service.dto.UserRequest;
-import com.kalhan.user_service.dto.ChangePasswordRequest;
-import com.kalhan.user_service.dto.UserDto;
+import com.kalhan.user_service.dto.*;
 import com.kalhan.user_service.entity.User;
 import com.kalhan.user_service.file.FileStorageService;
 import com.kalhan.user_service.handler.exception.IncorrectCredentialsException;
@@ -14,6 +12,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -69,6 +71,77 @@ public class UserService {
         String profilePicture = fileStorageService.saveFile(file, user.getId());
         user.setProfilePhoto(profilePicture);
         userRepository.save(user);
+    }
+
+    public void followUserAccount(UserFollowRequest request,String username){
+        User followingUser = userRepository.findByEmail(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        User followedUser = userRepository.findByEmail(request.email())
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        //for following user
+        Set<User> followingList = followingUser.getFollowing();
+        followingList.add(followedUser);
+        followingUser.setFollowing(followingList);
+        userRepository.save(followingUser);
+
+        //for followed user
+        Set<User> followList = followedUser.getFollowers();
+        followList.add(followingUser);
+        followedUser.setFollowers(followList);
+        userRepository.save(followedUser);
+    }
+
+    public void unfollowUserAccount(UserFollowRequest request,String username){
+        User unfollowingUser = userRepository.findByEmail(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        User unfollowedUser = userRepository.findByEmail(request.email())
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        //for unfollowing user
+        Set<User> followinglist = unfollowingUser.getFollowing();
+        followinglist.remove(unfollowedUser);
+        unfollowingUser.setFollowing(followinglist);
+        userRepository.save(unfollowingUser);
+
+        //for unfollowed user
+        Set<User> followList = unfollowedUser.getFollowers();
+        followList.remove(unfollowingUser);
+        unfollowedUser.setFollowers(followList);
+        userRepository.save(unfollowedUser);
+    }
+
+    public Set<FollowDto> getUserFollowers(String id){
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with id: " + id));
+
+        Set<FollowDto> followersDto = user.getFollowers().stream()
+                .map(follower -> FollowDto.builder()
+                        .firstname(follower.getFirstname())
+                        .lastname(follower.getLastname())
+                        .profilePhoto(follower.getProfilePhoto())
+                        .build())
+                .collect(Collectors.toSet());
+
+        return followersDto;
+    }
+
+    public Set<FollowDto> getUserFollowing(String id){
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        Set<FollowDto> followingDto = user.getFollowing().stream()
+                .map(follower -> FollowDto.builder()
+                        .firstname(follower.getFirstname())
+                        .lastname(follower.getLastname())
+                        .profilePhoto(follower.getProfilePhoto())
+                        .build())
+                .collect(Collectors.toSet());
+
+        return followingDto;
+
     }
 
 }

@@ -34,6 +34,7 @@ import java.security.Principal;
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -70,6 +71,7 @@ public class AuthenticationService {
                 .lastname(request.getLastname())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
+                .followers(new HashSet<>())
                 .isAccountLocked(false)
                 .enabled(false)
                 .roles(List.of(userRole.getName()))  // Use role name

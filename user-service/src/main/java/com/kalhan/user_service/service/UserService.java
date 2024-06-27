@@ -31,10 +31,10 @@ public class UserService {
     }
 
     public User findUserByEmail(String email){
-        return userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        return userRepository.findByEmail(email).orElse(null);
     }
 
-    public User findUserById(String id){return userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("User not found"));}
+    public User findUserById(String id){return userRepository.findById(id).orElse(null);}
 
     public void activateAccount(String id){
         User user = userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("User not found"));

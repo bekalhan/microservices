@@ -7,6 +7,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="config-server" />
+        <module name="post-service" />
         <module name="security-service" />
         <module name="email-service" />
         <module name="api-gateway" />
@@ -25,6 +26,7 @@
       <module name="discovery-service" options="-parameters" />
       <module name="email-service" options="-parameters" />
       <module name="gateway" options="-parameters" />
+      <module name="post-service" options="-parameters" />
       <module name="security-service" options="-parameters" />
       <module name="user-service" options="-parameters" />
     </option>

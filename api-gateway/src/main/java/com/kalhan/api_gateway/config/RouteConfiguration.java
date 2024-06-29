@@ -48,6 +48,12 @@ public class RouteConfiguration {
                                         .filter(authFilter.apply(
                                                 new AbstractGatewayFilterFactory.NameConfig())))
                         .uri("lb://user-service"))
+                .route("post-service-route", r -> r.path("/post-service/**")
+                        .filters(f ->
+                                f.rewritePath("/post-service(?<segment>/?.*)", "$\\{segment}")
+                                        .filter(authFilter.apply(
+                                                new AbstractGatewayFilterFactory.NameConfig())))
+                        .uri("lb://post-service"))
                 .build();
     }
 }

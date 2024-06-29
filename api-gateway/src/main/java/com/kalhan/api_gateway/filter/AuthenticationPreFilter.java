@@ -32,8 +32,15 @@ public class AuthenticationPreFilter extends AbstractGatewayFilterFactory<Abstra
             "/auth/password-reset-request",
             "/auth/reset-password",
             "/user/get-followers",
-            "/user/get-following"
+            "/user/get-following",
+            "/post/get-all-posts",
+            "/post/get-post/",
+            "/post/get-user-posts/",
+            "/post/get-post-likes/",
+            "/post/get-post-saved-count/"
+            // Add other endpoints that require authentication here
     );
+
 
     private static final List<String> adminListEndpoints = List.of(
             "/user/block-user"
@@ -81,6 +88,7 @@ public class AuthenticationPreFilter extends AbstractGatewayFilterFactory<Abstra
                         .flatMap(response -> {
                             ServerHttpRequest request = exchange.getRequest().mutate()
                                     .header("username", response.getUsername())
+                                    .header("id",response.getId())
                                     .header("authorities", String.join(",", response.getAuthorities()))
                                     .header("auth-token", response.getToken())
                                     .build();

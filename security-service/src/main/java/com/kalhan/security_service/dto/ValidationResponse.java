@@ -14,5 +14,6 @@ public class ValidationResponse {
     private boolean isAuthenticated;
     private String username;
     private String token;
+    private String id;
     private List<String> authorities;
 }

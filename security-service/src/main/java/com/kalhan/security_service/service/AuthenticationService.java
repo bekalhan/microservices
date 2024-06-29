@@ -72,6 +72,7 @@ public class AuthenticationService {
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .followers(new HashSet<>())
+                .following(new HashSet<>())
                 .isAccountLocked(false)
                 .enabled(false)
                 .roles(List.of(userRole.getName()))  // Use role name
@@ -197,6 +198,7 @@ public class AuthenticationService {
                 .username(username)
                 .token(token)
                 .authorities(authorities)
+                .id(apiUser.getId())
                 .isAuthenticated(true)
                 .build();
     }

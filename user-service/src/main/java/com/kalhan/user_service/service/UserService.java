@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -35,6 +36,8 @@ public class UserService {
     }
 
     public User findUserById(String id){return userRepository.findById(id).orElse(null);}
+
+    public UserDto findUserForPost(String id){return  userMapper.toUserDto(Objects.requireNonNull(userRepository.findById(id).orElse(null)));}
 
     public void activateAccount(String id){
         User user = userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("User not found"));

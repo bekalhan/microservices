@@ -23,4 +23,5 @@ public class UserCreateRequest {
     private List<String> roles;
     private String token;
     private Set<User> followers;
+    private Set<User> following;
 }

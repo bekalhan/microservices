@@ -15,5 +15,6 @@ public class ValidationResponse {
     private String methodType;
     private String username;
     private String token;
+    private String id;
     private List<String> authorities;
 }

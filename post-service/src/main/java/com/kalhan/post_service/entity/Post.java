@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -17,12 +18,12 @@ import java.util.Set;
 @Table(name = "posts")
 public class Post {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @Column(nullable = false)
     private String title;
     @Column(nullable = false)
     private String userId;
-    @Column(nullable = false)
     private String thumbnail;
     @Column(nullable = false)
     private String content;

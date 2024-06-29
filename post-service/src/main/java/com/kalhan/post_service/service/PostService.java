@@ -8,12 +8,13 @@ import com.kalhan.post_service.handler.exception.ResourceNoAccessException;
 import com.kalhan.post_service.handler.exception.ResourceNotFoundException;
 import com.kalhan.post_service.mapper.PostMapper;
 import com.kalhan.post_service.repository.PostRepository;
-import com.kalhan.user_service.entity.User;
+import com.kalhan.post_service.file.FileStorageService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -21,73 +22,34 @@ public class PostService {
 
     private final PostMapper postMapper;
     private final PostRepository postRepository;
+    private final FileStorageService fileStorageService;
     private final UserApiClient userApiClient;
 
-    public List<PostDto> getAllPosts(){
+    public List<PostDto> getAllPosts() {
         return postRepository.findAll()
                 .stream().map(postMapper::toPostDto).toList();
     }
 
-    public PostDto getPostById(Integer id){
-        return postMapper.toPostDto(postRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Post not found with this id "+id)));
+    public PostDto getPostById(Integer id) {
+        return postMapper.toPostDto(postRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Post not found with this id " + id)));
     }
 
-    public List<PostDto> getUserPosts(String userId){
+    public List<PostDto> getUserPosts(String userId) {
         List<Post> userPosts = postRepository.findByUserId(userId);
         return userPosts.stream().map(postMapper::toPostDto).toList();
     }
 
-    public void createPost(
-            CreateUpdatePostRequest request,
-            String username
-    ){
-        User user = userApiClient.findUserByEmail(username);
-
-        if(user == null){
-            throw new UsernameNotFoundException("User not found");
-        }
-
-        PostDto postDto = PostDto.builder()
-                .title(request.title())
-                .thumbnail(request.thumbnail())
-                .content(request.content())
-                .userId(user.getId())
-                .build();
-
-        Post post = postMapper.toPost(postDto);
-        postRepository.save(post);
+    public List<PostDto> getUserSaved(String userId) {
+        List<Post> allPosts = postRepository.findAll();
+        List<Post> savedPosts = allPosts.stream()
+                .filter(post -> post.getSaved().contains(userId))
+                .collect(Collectors.toList());
+        return savedPosts.stream()
+                .map(postMapper::toPostDto)
+                .collect(Collectors.toList());
     }
 
-    public void updatePost(
-            Integer id,
-            CreateUpdatePostRequest request,
-            String username
-    ){
-        Post post = approveIdentityAndReturnPost(id,username);
-
-        post.setTitle(request.title());
-        post.setThumbnail(request.thumbnail());
-        post.setContent(request.content());
-        postRepository.save(post);
-
-
-    }
-
-    public void likeAndUnlikePost(Integer postId, String userId) {
-        Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new ResourceNotFoundException("Post not found with this id " + postId));
-
-        Set<String> likesList = post.getLikes();
-
-        if (likesList.contains(userId)) {
-            likesList.remove(userId);
-        } else {
-            likesList.add(userId);
-        }
-
-        post.setLikes(likesList);
-        postRepository.save(post);
-    }
 
     public List<UserDto> getPostLikes(Integer postId) {
         Post post = postRepository.findById(postId)
@@ -107,29 +69,114 @@ public class PostService {
                 .toList();
     }
 
+    public Integer getSavedCount(Integer postId){
+        return Math.toIntExact(postRepository.findById(postId).stream().count());
+    }
+
+    public void createPost(MultipartFile thumbnailFile, String title,String content, String userId) {
+        String thumbnailPath = fileStorageService.saveFile(thumbnailFile);
+        if (thumbnailPath == null) {
+            throw new RuntimeException("Failed to save thumbnail");
+        }
+
+        PostDto postDto = PostDto.builder()
+                .title(title)
+                .content(content)
+                .userId(userId)
+                .thumbnail(thumbnailPath)
+                .likes(new HashSet<>())
+                .saved(new HashSet<>())
+                .comments(new ArrayList<>())
+                .build();
+
+        Post post = postMapper.toPost(postDto);
+        postRepository.save(post);
+    }
+
+    public void updatePost(
+            Integer postId,
+            CreateUpdatePostRequest request,
+            String userId
+    ) {
+        Post post = approveIdentityAndReturnPost(postId, userId);
+
+        post.setTitle(request.getTitle());
+        post.setContent(request.getContent());
+        postRepository.save(post);
+    }
+
+    public void uploadThumbnail(Integer postId,MultipartFile thumbnailFile,String userId){
+        Post post = approveIdentityAndReturnPost(postId, userId);
+
+        String thumbnailPath = fileStorageService.saveFile(thumbnailFile);
+        if (thumbnailPath == null) {
+            throw new RuntimeException("Failed to save thumbnail");
+        }
+
+        post.setThumbnail(thumbnailPath);
+        postRepository.save(post);
+    }
+
+    public void likeAndUnlikePost(Integer postId, String userId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new ResourceNotFoundException("Post not found with this id " + postId));
+
+        Set<String> likesList = post.getLikes();
+
+        if (likesList.contains(userId)) {
+            likesList.remove(userId);
+        } else {
+            likesList.add(userId);
+        }
+
+        post.setLikes(likesList);
+        postRepository.save(post);
+    }
+
+    public void saveAndUnsavedPost(Integer postId, String userId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new ResourceNotFoundException("Post not found with this id " + postId));
+
+        Set<String> saveList = post.getSaved();
+
+        if (saveList.contains(userId)) {
+            saveList.remove(userId);
+        } else {
+            saveList.add(userId);
+        }
+
+        post.setSaved(saveList);
+        postRepository.save(post);
+    }
+
     public void deletePost(
             Integer id,
-            String username
-    ){
-        approveIdentityAndReturnPost(id,username);
+            String userId
+    ) {
+        approveIdentityAndReturnPost(id, userId);
         postRepository.deleteById(id);
     }
 
-    private Post approveIdentityAndReturnPost(Integer id,String username){
-        User user = userApiClient.findUserByEmail(username);
+    public void uploadThumbnail(
+            Integer postId,
+            MultipartFile file
+    ) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new ResourceNotFoundException("Post not found with this id " + postId));
 
-        if(user == null){
-            throw new UsernameNotFoundException("User not found");
-        }
+        String thumbnail = fileStorageService.saveFile(file);
+        post.setThumbnail(thumbnail);
+        postRepository.save(post);
+    }
 
-        Post post = postRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Post not found with this id "+id));
+    private Post approveIdentityAndReturnPost(Integer postId, String userId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new ResourceNotFoundException("Post not found with this id " + postId));
 
-        if(!Objects.equals(post.getUserId(), user.getId())){
-            throw  new ResourceNoAccessException("You have no access to this resource");
+        if (!Objects.equals(post.getUserId(), userId)) {
+            throw new ResourceNoAccessException("You have no access to this resource");
         }
 
         return post;
     }
-
 }

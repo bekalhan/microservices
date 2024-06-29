@@ -73,6 +73,8 @@ public class UserController {
             @RequestBody UserFollowRequest userFollowRequest,
             @RequestHeader("username") String username
     ){
+        System.out.println("1 -> "+userFollowRequest.email());
+        System.out.println("2 -> "+username);
         userService.followUserAccount(userFollowRequest,username);
         return ResponseEntity.status(HttpStatus.OK).body("You has been followed this user successfully");
     }
@@ -100,6 +102,14 @@ public class UserController {
     ){
         Set<FollowDto> userDtoSet = userService.getUserFollowing(id);
         return ResponseEntity.status(HttpStatus.OK).body(userDtoSet);
+    }
+
+    @GetMapping("/find-user-for-post/{id}")
+    public ResponseEntity<UserDto> getUserForPost(
+            @PathVariable(value = "id") String id
+    ){
+        UserDto userDto = userService.findUserForPost(id);
+        return ResponseEntity.status(HttpStatus.OK).body(userDto);
     }
 
 }

@@ -2,7 +2,6 @@ package com.kalhan.post_service.controller;
 
 import com.kalhan.post_service.dto.CreateUpdatePostRequest;
 import com.kalhan.post_service.dto.PostDto;
-import com.kalhan.post_service.dto.UserDto;
 import com.kalhan.post_service.file.FileStorageService;
 import com.kalhan.post_service.service.PostService;
 import jakarta.validation.Valid;
@@ -41,13 +40,6 @@ public class PostController {
             @PathVariable(value = "userId") String userId
     ) {
         return ResponseEntity.status(HttpStatus.OK).body(postService.getUserPosts(userId));
-    }
-
-    @GetMapping("/get-post-likes/{postId}")
-    public ResponseEntity<List<UserDto>> getPostLikes(
-            @PathVariable(value = "postId") Integer postId
-    ){
-        return ResponseEntity.status(HttpStatus.OK).body(postService.getPostLikes(postId));
     }
 
     @GetMapping("/get-post-saved-count/{postId}")

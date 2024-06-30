@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
+import java.util.Set;
 
 @AllArgsConstructor
 @Builder
@@ -15,6 +16,7 @@ import java.util.List;
 @Table(name = "comments")
 public class Comment {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @ManyToOne
@@ -24,6 +26,5 @@ public class Comment {
     private String userId;
     private String content;
 
-    @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Reply> replies;
+    private Set<String> likes;
 }

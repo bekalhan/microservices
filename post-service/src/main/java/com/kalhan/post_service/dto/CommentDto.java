@@ -9,17 +9,14 @@ import lombok.Setter;
 import java.util.List;
 import java.util.Set;
 
+
 @Getter
 @Setter
 @Builder
-public class PostDto {
-    private String title;
-    private String thumbnail;
+public class CommentDto {
     @JsonIgnore
     private String userId;
     private String content;
     private Set<UserDto> likes;
-    private Set<UserDto> saved;
-    private List<CommentDto> comments;
     private UserDto userDto;
 }

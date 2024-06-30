@@ -44,29 +44,10 @@ public class PostService {
         List<Post> allPosts = postRepository.findAll();
         List<Post> savedPosts = allPosts.stream()
                 .filter(post -> post.getSaved().contains(userId))
-                .collect(Collectors.toList());
+                .toList();
         return savedPosts.stream()
                 .map(postMapper::toPostDto)
                 .collect(Collectors.toList());
-    }
-
-
-    public List<UserDto> getPostLikes(Integer postId) {
-        Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new ResourceNotFoundException("Post not found with this id " + postId));
-
-        Set<String> likesList = post.getLikes();
-
-        return likesList.stream()
-                .map(userApiClient::findUserById)
-                .map(user -> {
-                    return UserDto
-                            .builder()
-                            .firstname(user.getFirstname())
-                            .lastname(user.getLastname())
-                            .profilePhoto(user.getProfilePhoto()).build();
-                })
-                .toList();
     }
 
     public Integer getSavedCount(Integer postId){
@@ -157,23 +138,13 @@ public class PostService {
         postRepository.deleteById(id);
     }
 
-    public void uploadThumbnail(
-            Integer postId,
-            MultipartFile file
-    ) {
-        Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new ResourceNotFoundException("Post not found with this id " + postId));
-
-        String thumbnail = fileStorageService.saveFile(file);
-        post.setThumbnail(thumbnail);
-        postRepository.save(post);
-    }
-
     private Post approveIdentityAndReturnPost(Integer postId, String userId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new ResourceNotFoundException("Post not found with this id " + postId));
 
-        if (!Objects.equals(post.getUserId(), userId)) {
+        UserDto apiUser = userApiClient.findUserById(userId);
+
+        if (!Objects.equals(post.getUserId(), userId) && !apiUser.getRoles().contains("ROLE_ADMIN")) {
             throw new ResourceNoAccessException("You have no access to this resource");
         }
 

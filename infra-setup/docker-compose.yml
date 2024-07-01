@@ -1,4 +1,3 @@
-# Use postgres/example user/password credentials
 version: '3.1'
 
 services:
@@ -10,6 +9,7 @@ services:
       - "zookeeper_data:/bitnami"
     environment:
       - ALLOW_ANONYMOUS_LOGIN=yes
+
   kafka:
     image: "docker.io/bitnami/kafka:2-debian-10"
     ports:
@@ -28,6 +28,7 @@ services:
       - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
     depends_on:
       - zookeeper
+
   kafka-ui:
     image: provectuslabs/kafka-ui
     container_name: kafka-ui
@@ -38,14 +39,44 @@ services:
       - KAFKA_CLUSTERS_0_NAME=local
       - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka:9093
       - KAFKA_CLUSTERS_0_ZOOKEEPER=localhost:2181
+
   mail-dev:
     container_name: mail-dev-bsn
     image: maildev/maildev
     ports:
       - 1080:1080
       - 1025:1025
+
+  mongodb:
+    image: mongo
+    container_name: mongodb-container
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=kalhan
+      - MONGO_INITDB_ROOT_PASSWORD=kalhan
+    volumes:
+      - mongodb_data:/data/db
+
+  postgres:
+    image: postgres:latest
+    container_name: my-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=kalhan
+      - POSTGRES_PASSWORD=kalhan
+      - POSTGRES_DB=postdb
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
 volumes:
   zookeeper_data:
     driver: local
   kafka_data:
+    driver: local
+  mongodb_data:
+    driver: local
+  postgres_data:
     driver: local

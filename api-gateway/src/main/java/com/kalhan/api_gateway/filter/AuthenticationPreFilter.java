@@ -38,12 +38,6 @@ public class AuthenticationPreFilter extends AbstractGatewayFilterFactory<Abstra
             "/post/get-user-posts/",
             "/post/get-post-likes/",
             "/post/get-post-saved-count/"
-            // Add other endpoints that require authentication here
-    );
-
-
-    private static final List<String> adminListEndpoints = List.of(
-            "/user/block-user"
     );
 
     private final WebClient.Builder webClientBuilder;
@@ -69,9 +63,6 @@ public class AuthenticationPreFilter extends AbstractGatewayFilterFactory<Abstra
         }
     }
 
-    private Predicate<ServerHttpRequest> isAdminSecured =
-            request -> adminListEndpoints.stream().noneMatch(uri -> request.getURI().getPath().contains(uri));
-
     private Predicate<ServerHttpRequest> isSecured =
             request -> whiteListEndpoints.stream().noneMatch(uri -> request.getURI().getPath().contains(uri));
 
@@ -88,18 +79,10 @@ public class AuthenticationPreFilter extends AbstractGatewayFilterFactory<Abstra
                         .flatMap(response -> {
                             ServerHttpRequest request = exchange.getRequest().mutate()
                                     .header("username", response.getUsername())
-                                    .header("id",response.getId())
+                                    .header("id", response.getId())
                                     .header("authorities", String.join(",", response.getAuthorities()))
                                     .header("auth-token", response.getToken())
                                     .build();
-
-                            // Check if the path requires admin role
-                            if (adminListEndpoints.stream().anyMatch(exchange.getRequest().getURI().getPath()::startsWith)) {
-                                // Check if the user has admin role
-                                if (!isAdmin(exchange)) {
-                                    return onError(exchange, "403", "Forbidden", "User is not authorized to access this resource", HttpStatus.FORBIDDEN);
-                                }
-                            }
 
                             return chain.filter(exchange.mutate().request(request).build());
                         })
@@ -126,10 +109,5 @@ public class AuthenticationPreFilter extends AbstractGatewayFilterFactory<Abstra
             log.error("Error handling exception: {}", e.getMessage());
             return response.setComplete();
         }
-    }
-
-    private boolean isAdmin(ServerWebExchange exchange) {
-        List<String> authorities = exchange.getRequest().getHeaders().get("authorities");
-        return authorities != null && authorities.contains("ROLE_ADMIN");
     }
 }

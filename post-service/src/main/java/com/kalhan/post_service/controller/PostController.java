@@ -2,12 +2,14 @@ package com.kalhan.post_service.controller;
 
 import com.kalhan.post_service.dto.CreateUpdatePostRequest;
 import com.kalhan.post_service.dto.PostDto;
+import com.kalhan.post_service.dto.PostHelloDto;
 import com.kalhan.post_service.file.FileStorageService;
 import com.kalhan.post_service.service.PostService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +24,14 @@ public class PostController {
 
     private final PostService postService;
     private final FileStorageService fileStorageService;
+
+    private final PostHelloDto sayhello;
+
+    @GetMapping("/heartbeat")
+    public ResponseEntity<PostHelloDto> heartbeat(){
+        return ResponseEntity.status(HttpStatus.OK).body(sayhello);
+    }
+
 
     @GetMapping("/get-all-posts")
     public ResponseEntity<List<PostDto>> getAllPosts() {

@@ -33,11 +33,13 @@ public class AuthenticationPreFilter extends AbstractGatewayFilterFactory<Abstra
             "/auth/reset-password",
             "/user/get-followers",
             "/user/get-following",
+            "/user/heartbeat",
             "/post/get-all-posts",
             "/post/get-post/",
             "/post/get-user-posts/",
             "/post/get-post-likes/",
-            "/post/get-post-saved-count/"
+            "/post/get-post-saved-count/",
+            "post/heartbeat"
     );
 
     private final WebClient.Builder webClientBuilder;

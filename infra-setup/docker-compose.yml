@@ -67,9 +67,20 @@ services:
       - POSTGRES_USER=kalhan
       - POSTGRES_PASSWORD=kalhan
       - POSTGRES_DB=postdb
-
     volumes:
       - postgres_data:/var/lib/postgresql/data
+
+  rabbitmq:
+    image: rabbitmq:management
+    container_name: rabbitmq-container
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
 
 volumes:
   zookeeper_data:
@@ -79,4 +90,6 @@ volumes:
   mongodb_data:
     driver: local
   postgres_data:
+    driver: local
+  rabbitmq_data:
     driver: local

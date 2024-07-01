@@ -5,6 +5,8 @@ import com.kalhan.user_service.entity.User;
 import com.kalhan.user_service.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +20,13 @@ import java.util.Set;
 public class UserController {
 
     private final UserService userService;
+
+    private final UserHelloDto sayhello;
+
+    @GetMapping("heartbeat")
+    public ResponseEntity<UserHelloDto> heartbeat(){
+        return ResponseEntity.status(HttpStatus.OK).body(sayhello);
+    }
 
     @PostMapping("/create-new-user")
     public ResponseEntity<User> createNewUser(@RequestBody UserDto userCreateRequest){

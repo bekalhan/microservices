@@ -2,11 +2,26 @@ server:
   port: 8888
 spring:
   profiles:
-    active: native
+    #active: native
+    active: git
   application:
     name: config-server
   cloud:
     config:
       server:
-        native:
-          search-locations: classpath:/configurations
+        git:
+          uri: https://github.com/bekalhan/kalhan-config.git
+          username: bekalhan
+          password: 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
+          timeout: 5
+          clone-on-start: true
+          force-pull: true
+          default-label: main
+#        native:
+#          search-locations: classpath:/configurations
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"

@@ -1,6 +1,7 @@
 # Project Name
 
-![Project Image](<img width="1389" alt="overview" src="https://github.com/user-attachments/assets/11cea748-be93-474d-b443-dbbecab45ca2">)
+![Project Image]<img width="1389" alt="overview" src="https://github.com/user-attachments/assets/11cea748-be93-474d-b443-dbbecab45ca2">
+
 
 # Microservices Blog Project
 
@@ -41,14 +42,6 @@ This project is a blog application built using a microservices architecture, lev
 2. **Set Up the Infrastructure**
 
  #!/bin/bash
-
-# Navigate to the infra-setup directory
-cd infra-setup
-
-# Start the services using Docker Compose
-docker-compose up
-
-
 
 
 ## Menu

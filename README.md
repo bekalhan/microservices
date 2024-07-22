@@ -1,6 +1,6 @@
 # Project Name
 
-![Project Image]<img width="1389" alt="overview" src="https://github.com/user-attachments/assets/11cea748-be93-474d-b443-dbbecab45ca2">
+<img width="1389" alt="overview" src="https://github.com/user-attachments/assets/11cea748-be93-474d-b443-dbbecab45ca2">
 
 
 # Microservices Blog Project
@@ -33,6 +33,7 @@ This project is a blog application built using a microservices architecture, lev
 - **GitHub**: For storing and retrieving configuration settings.
 - **Spring Boot**: For building and running the microservices.
 
+## Getting Started
 
 1. **Clone the Repository**
 
@@ -41,7 +42,22 @@ This project is a blog application built using a microservices architecture, lev
 
 2. **Set Up the Infrastructure**
 
- #!/bin/bash
+   ```bash
+   # Navigate to the infra-setup directory
+   cd infra-setup
+
+   # Start the services using Docker Compose
+   docker-compose up
+
+3. **Run the services in this order
+
+- [1. config-server]
+- [2. discovery-service]
+- [3. security-service]
+- [4. user-service]
+- [5. post-service]
+- [6. email-service]
+- [5. api-gateway]
 
 
 ## Menu

@@ -1,10 +1,55 @@
 # Project Name
 
-![Project Image](path/to/your/image.png)
+![Project Image](<img width="1389" alt="overview" src="https://github.com/user-attachments/assets/11cea748-be93-474d-b443-dbbecab45ca2">)
 
-## Description
+# Microservices Blog Project
 
-A brief description of your project goes here. Explain what the project is about, its main objectives, and any other relevant details.
+This project is a blog application built using a microservices architecture, leveraging Spring Security and various technologies to ensure robust and scalable functionality. The application is composed of seven distinct services:
+
+- **user-service**: Manages user data and authentication.
+- **auth-service**: Handles security with JWT and stores tokens in MongoDB.
+- **email-service**: Sends email notifications, including user registration confirmation, using Kafka.
+- **post-service**: Manages blog posts.
+- **discovery-service**: Uses Eureka for service discovery.
+- **config-service**: Manages configuration settings pulled from GitHub.
+- **api-gateway**: Acts as the entry point for all client requests, routing them to the appropriate services.
+
+## Key Features
+
+- **JWT Authentication**: Utilizes JWT for secure user authentication, with tokens managed and stored in MongoDB.
+- **Email Confirmation**: Employs Kafka to handle email notifications for user registration.
+- **Service Discovery**: Eureka-server is used for dynamic service discovery.
+- **Centralized Configuration**: Configurations are centrally managed in the config-server, which retrieves settings from GitHub.
+- **Microservices Architecture**: Modular design using microservices for scalability and maintainability.
+
+
+## Technologies Used
+
+- **Spring Security**: For securing the services and managing JWT authentication.
+- **MongoDB**: Used for storing tokens and user data.
+- **Kafka**: For handling email notifications.
+- **Eureka**: For service discovery.
+- **GitHub**: For storing and retrieving configuration settings.
+- **Spring Boot**: For building and running the microservices.
+
+
+1. **Clone the Repository**
+
+   ```bash
+   git clone https://github.com/your-username/your-repository.git
+
+2. **Set Up the Infrastructure**
+
+ #!/bin/bash
+
+# Navigate to the infra-setup directory
+cd infra-setup
+
+# Start the services using Docker Compose
+docker-compose up
+
+
+
 
 ## Menu
 

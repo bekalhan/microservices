@@ -51,13 +51,13 @@ This project is a blog application built using a microservices architecture, lev
 
 3. **Run the services in this order
 
-- [1. config-server]
-- [2. discovery-service]
-- [3. security-service]
-- [4. user-service]
-- [5. post-service]
-- [6. email-service]
-- [5. api-gateway]
+1. config-server
+2. discovery-service
+3. security-service
+4. user-service
+5. post-service
+6. email-service
+5. api-gateway
 
 
 ## Menu
@@ -71,22 +71,22 @@ This project is a blog application built using a microservices architecture, lev
 
 A brief overview of the architecture and technologies used in this project. 
 
-[Download PDF Presentation](path/to/architecture-and-technologies.pdf)
+[section-1.pdf](https://github.com/user-attachments/files/16336258/bolum1.pdf)
 
 ## Monolith, SOA, and Microservices
 
 An explanation of Monolith, SOA, and Microservices architecture, their differences, and use cases.
 
-[Download PDF Presentation](path/to/monolith-soa-microservices.pdf)
+[section-2.pdf](https://github.com/user-attachments/files/16336266/bolum2.pdf)
 
 ## Docker
 
 A brief description of Docker, its importance, and how it's used in the project.
 
-[Download PDF Presentation](path/to/docker.pdf)
+[section-3.pdf](https://github.com/user-attachments/files/16336269/bolum3.pdf)
 
 ## Spring Security
 
 An overview of Spring Security, its features, and its implementation in the project.
 
-[Download PDF Presentation](path/to/spring-security.pdf)
+[section-4.pdf](https://github.com/user-attachments/files/16336278/bolum4.pdf)

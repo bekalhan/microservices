@@ -40,7 +40,7 @@ This project is a blog application built using a microservices architecture, lev
    ```bash
    git clone https://github.com/your-username/your-repository.git
 
-2. **Set Up the Infrastructure**
+2. Set Up the Infrastructure**
 
    ```bash
    # Navigate to the infra-setup directory

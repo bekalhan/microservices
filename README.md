@@ -69,7 +69,13 @@ This project is a blog application built using a microservices architecture, lev
 
 ## Overview of Architecture and Technologies
 
-A brief overview of the architecture and technologies used in this project. 
+Project interview and technologies used
+
+
+
+<img width="1160" alt="section1-pic" src="https://github.com/user-attachments/assets/0ab265ed-af65-492c-8048-1f6e5460bf49">
+
+
 
 [section-1.pdf](https://github.com/user-attachments/files/16336258/bolum1.pdf)
 
@@ -77,16 +83,36 @@ A brief overview of the architecture and technologies used in this project.
 
 An explanation of Monolith, SOA, and Microservices architecture, their differences, and use cases.
 
+
+
+<img width="1160" alt="section2-pic" src="https://github.com/user-attachments/assets/e0a70e03-916d-4335-92e8-880fcfb3a6e4">
+
+
+
 [section-2.pdf](https://github.com/user-attachments/files/16336266/bolum2.pdf)
+
 
 ## Docker
 
 A brief description of Docker, its importance, and how it's used in the project.
 
+
+
+<img width="1179" alt="section3-pic" src="https://github.com/user-attachments/assets/fd97ee4a-b859-4951-ab8d-34c8f3e1853f">
+
+
+
 [section-3.pdf](https://github.com/user-attachments/files/16336269/bolum3.pdf)
+
 
 ## Spring Security
 
 An overview of Spring Security, its features, and its implementation in the project.
+
+
+
+<img width="1182" alt="section4-pic" src="https://github.com/user-attachments/assets/3c0c068c-cb78-47fa-b1d4-03fd4a39908f">
+
+
 
 [section-4.pdf](https://github.com/user-attachments/files/16336278/bolum4.pdf)

@@ -66,6 +66,8 @@ This project is a blog application built using a microservices architecture, lev
 - [Monolith, SOA, and Microservices](#monolith-soa-and-microservices)
 - [Docker](#docker)
 - [Spring Security](#spring-security)
+- [Kafka](#kafka)
+- [Discovery server](#discovery-service)
 
 ## Overview of Architecture and Technologies
 
@@ -116,3 +118,39 @@ An overview of Spring Security, its features, and its implementation in the proj
 
 
 [section-4.pdf](https://github.com/user-attachments/files/16336278/bolum4.pdf)
+
+
+
+## Kafka
+
+An overview of Apache Kafka, its features, and its implementation in the project.
+
+
+
+<img width="1394" alt="section4 2" src="https://github.com/user-attachments/assets/9ce40a92-9038-4736-b83d-6339dd6ff52d">
+
+
+
+
+<img width="1394" alt="section4 2 2" src="https://github.com/user-attachments/assets/e886c83e-2836-4e2c-9ce1-341070bcc709">
+
+
+
+
+[section.2.pdf](https://github.com/user-attachments/files/16351139/bolum4.2.pdf)
+
+
+
+## Discovery Server
+
+An overview of Netflix Eureka, its features, and its implementation in the project.
+
+
+
+<img width="1393" alt="section5" src="https://github.com/user-attachments/assets/9071ed7a-b5da-4069-80ca-7eec4dd3f7ec">
+
+
+
+[section5.pdf](https://github.com/user-attachments/files/16351182/bolum5.pdf)
+
+

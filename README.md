@@ -67,7 +67,7 @@ This project is a blog application built using a microservices architecture, lev
 - [Docker](#docker)
 - [Spring Security](#spring-security)
 - [Kafka](#kafka)
-- [Discovery server](#discovery-service)
+- [Discovery server](#discovery-server)
 
 ## Overview of Architecture and Technologies
 
@@ -137,7 +137,7 @@ An overview of Apache Kafka, its features, and its implementation in the project
 
 
 
-[section.2.pdf](https://github.com/user-attachments/files/16351139/bolum4.2.pdf)
+[section4.2.pdf](https://github.com/user-attachments/files/16351139/bolum4.2.pdf)
 
 
 

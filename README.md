@@ -68,6 +68,7 @@ This project is a blog application built using a microservices architecture, lev
 - [Spring Security](#spring-security)
 - [Kafka](#kafka)
 - [Discovery server](#discovery-server)
+- [Configurations Management](#configurations-management)
 
 ## Overview of Architecture and Technologies
 
@@ -152,5 +153,32 @@ An overview of Netflix Eureka, its features, and its implementation in the proje
 
 
 [section5.pdf](https://github.com/user-attachments/files/16351182/bolum5.pdf)
+
+
+
+## Configurations Management
+
+
+An overview of Spring cloud,Spring cloud bus, its features, and its implementation in the project.
+
+
+
+
+<img width="854" alt="SECTİON6" src="https://github.com/user-attachments/assets/5503a2a8-b3e5-4d2c-9e9e-0cc9a50a7fd8">
+
+
+
+
+[section6.pdf](https://github.com/user-attachments/files/16362223/bolum6.pdf)
+
+
+
+
+## API Gateway
+
+
+An overview of Spring cloud gateway, its features, and its implementation in the project.
+
+
 
 

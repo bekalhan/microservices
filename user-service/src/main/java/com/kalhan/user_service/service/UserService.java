@@ -76,7 +76,7 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void followUserAccount(UserFollowRequest request,String username){
+    public void followUserAccount(UserFollowRequest request,String username) {
         User followingUser = userRepository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 

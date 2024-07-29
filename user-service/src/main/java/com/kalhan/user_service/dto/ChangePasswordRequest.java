@@ -3,13 +3,13 @@ package com.kalhan.user_service.dto;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ChangePasswordRequest {
     @NotEmpty(message = "Current password is mandatory")
     @NotNull(message = "Current password is mandatory")
